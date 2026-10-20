@@ -22,6 +22,7 @@ namespace Solution
             inventory = GetComponent<Inventory>();
             moveAction = InputSystem.actions.FindAction("Move");
             fireAction = InputSystem.actions.FindAction("Attack");
+            actionHistoryManager.SaveStateForUndo(new Vector2(positionX, positionY)); // Save the initial state
         }
 
         public void Update()
@@ -66,12 +67,12 @@ namespace Solution
                 actionHistoryManager.StartAutoMoveSequence(this);
             }
         }
-        public override void Move(Vector2 direction)
+               public override void Move(Vector2 direction)
         {
             base.Move(direction);
             mapGenerator.MoveEnemies();
             // Save the state AFTER the move
-      
+            actionHistoryManager.SaveStateForUndo(new Vector2(positionX, positionY));
         }
 
         public void UseFireStorm()
